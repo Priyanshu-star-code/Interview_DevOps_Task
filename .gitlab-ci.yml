@@ -1,0 +1,41 @@
+stages:
+  - build
+  - deploy
+
+variables:
+  DOCKER_DRIVER: overlay2
+  IMAGE_BACKEND: $CI_REGISTRY_IMAGE/backend
+  IMAGE_FRONTEND: $CI_REGISTRY_IMAGE/frontend
+
+build_backend:
+  stage: build
+  script:
+    - docker build -t $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA backend/
+    - docker push $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA
+  tags:
+    - self-hosted
+
+build_frontend:
+  stage: build
+  script:
+    - docker build -t $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA frontend/
+    - docker push $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA
+  tags:
+    - self-hosted
+
+deploy:
+  stage: deploy
+  script:
+    - ssh user@server "
+      docker pull $IMAGE_BACKEND:$CI_COMMIT_SHORT_SHA &&
+      docker pull $IMAGE_FRONTEND:$CI_COMMIT_SHORT_SHA &&
+      cd /home/user/app &&
+      docker-compose down &&
+      docker-compose up -d --build
+      "
+  environment:
+    name: production
+  only:
+    - main
+  tags:
+    - self-hosted

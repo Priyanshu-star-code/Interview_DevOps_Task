@@ -1,0 +1,44 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# React build
+/frontend/build/
+/frontend/.env
+
+# Backend logs & env
+/backend/logs
+/backend/.env
+
+# Laravel
+/vendor/
+.env
+/storage/
+bootstrap/cache/
+
+# Docker
+*.pid
+*.seed
+*.bak
+*.swp
+*.sock
+docker-compose.override.yml
+
+# IDE / Editor
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.DS_Store
+
+# Logs
+*.log
+
+# Coverage / Test
+coverage/
+.cache/
